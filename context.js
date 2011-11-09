@@ -1,20 +1,19 @@
 // Declarations
-var passwordMenuId, formId, passId;
+var passwordMenuId, passId;
 
 function contextFunction(info, tab) {
-	console.log(formId + " " + passId);
+	console.log(passId);
 };
 
 function handleMessages(msg) {
-	if(msg.password == true) {
+	if((msg.password == true) && (!passwordMenuId)){
 		passwordMenuId = chrome.contextMenus.create(
 			{"title": "Setup a half-life password",
 			 "contexts": ["all"],
 			 "onclick": contextFunction});
-		formId = msg.formId;
 		passId = msg.passId;
 		//console.log(msg.passId + " " + msg.formId);
-	} else if(passwordMenuId) {
+	} else if((msg.password == false ) && (passwordMenuId)) {
 		chrome.contextMenus.remove(passwordMenuId);
 		passwordMenuId = null;
 	} 
