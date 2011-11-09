@@ -1,20 +1,31 @@
 {
+	// Required
 	"name": "Password Half-Life",
 	"version": "0.1",
+	
+	// Recommended
 	"description": "An extension to substitute temporary passwords for the real password.",
-	"browser_action": {
-		"default_icon": "icon_48.png"
-	},
-	"permissions": [
-		"http://*/*",
-		"https://*/*"
-	],
 	"icons": {
 		"16": "icon_16.png",
 		"32": "icon_48.png",
 		"128": "icon_128.png"
 	},
+	//"default_locale": "en",
+
+	// Pick one
+	"browser_action": {
+		"default_icon": "icon_48.png"
+	},
+
+	// As needed
+	"background_page": "background.html",
 	"content_scripts": [
-		{ "matches": ["http://*/*", "https://*/*"], "js": ["context.js"] }
+		{ "matches": ["http://*/*", "https://*/*"], "js": ["jquery-1.7.min.js", "dom_element.js"] }
+	],
+	"content_security_policy": "default-src 'self'",
+	"permissions": [
+		"<all_urls>",
+		"contextMenus",
+		"tabs"
 	]
 }
