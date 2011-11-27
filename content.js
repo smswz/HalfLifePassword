@@ -17,17 +17,22 @@ function showContext(e){
 }
 
 // Scripting
-commPort = chrome.extension.connect({"name": "passhalf"});
+commPort = chrome.extension.connect({"name": "content"});
 commPort.onMessage.addListener(handleMessages);
 
 $("body").on("mousedown", showContext);
 
 var passfields = [];
+var formfields = [];
 $("input").each(function(i,e){
 	if(this.type === "password"){
+		var parent = e;
+		while(parent.tagName.toLowerCase() !== "form"){ parent = parent.parentNode };
 		passfields.push(e.id);
+		formfields.push(parent.id);
 		console.log(e);
-		commPort.postMessage({"type": "show", "fields": passfields});
+		console.log(parent);
+		commPort.postMessage({"type": "show", "fields": passfields, "forms": formfields});
 	}
 });
 //commPort.postMessage({"type": "checkin"})

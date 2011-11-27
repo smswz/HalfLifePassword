@@ -1,5 +1,5 @@
 // Declarations
-var passwordMenuId, passId;
+var contentPort, popupPort, passwordMenuId, passId;
 
 function contextFunction(info, tab) {
 	console.log(passId);
@@ -7,7 +7,7 @@ function contextFunction(info, tab) {
 	console.log(mod_url);
 }
 
-function handleMessages(msg) {
+function handleContentMessages(msg) {
 	if(msg.type === "pass") {
 		if((msg.passId != null) && (!passwordMenuId)) {
 			passwordMenuId = chrome.contextMenus.create(
@@ -26,13 +26,23 @@ function handleMessages(msg) {
 		chrome.tabs.getSelected(null, function(t){
 			chrome.pageAction.show(t.id);
 		});
+		console.log(msg.fields);
 	}
+}
+
+function handlePopupMessages(msg) {
+	
 }
 
 // Scripting
 chrome.extension.onConnect.addListener(function(port) {
-	console.assert(port.name === "passhalf");
-	port.onMessage.addListener(handleMessages);
+	if(port.name === "content"){
+		contentPort = port;
+		port.onMessage.addListener(handleContentMessages);
+	} else if(port.name === "popup"){
+		popupPort = port;
+		port.onMessage.addListener(handlePopupMessages);
+	}
 });
 
 
