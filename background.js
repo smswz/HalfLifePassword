@@ -31,7 +31,10 @@ function handleContentMessages(msg) {
 }
 
 function handlePopupMessages(msg) {
-	
+	if(msg.type === "wantNext"){
+		//console.log(msg.type);
+	}
+	console.log(msg.type);
 }
 
 // Scripting

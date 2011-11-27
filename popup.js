@@ -5,8 +5,11 @@ function handleMessages(msg) {
 }
 
 $(function() {
-	$("#prev_field").on("click", function(e){
-		alert("Gogo");
+	$("#prev_button").on("click", function(e){
+		commPort.postMessage({"type": "wantPrev"});
+	});
+	$("#next_button").on("click", function(e){
+		commPort.postMessage({"type": "wantNext"});
 	});
 });
 
