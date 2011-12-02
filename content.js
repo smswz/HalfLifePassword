@@ -2,7 +2,9 @@
 var commPort;
 
 function handleMessages(msg){
-	
+	if(msg.type === "highlight"){
+		$("#" + msg.id).background = ""
+	}
 }
 
 function showContext(e){

@@ -1,5 +1,7 @@
 // Declarations
-var contentPort, popupPort, passwordMenuId, passId;
+var contentPort, popupPort,
+	passFields, formFields,
+	passwordMenuId, passId;
 
 function contextFunction(info, tab) {
 	console.log(passId);
@@ -26,13 +28,18 @@ function handleContentMessages(msg) {
 		chrome.tabs.getSelected(null, function(t){
 			chrome.pageAction.show(t.id);
 		});
+		passFields = msg.fields;
+		formFields = msg.forms;
 		console.log(msg.fields);
 	}
 }
 
 function handlePopupMessages(msg) {
-	if(msg.type === "wantNext"){
-		//console.log(msg.type);
+	static var passIndex = 0;
+	if(msg.type === "wantNext") {
+		contentPort.postMessage({"type": "highlight", "id": passFields[++passIndex].id});
+	} else if(msg.type === "wantPrev") {
+		contentPort.postMessage({"type": "highlight", "id": passFields[--passIndex].id});
 	}
 	console.log(msg.type);
 }
