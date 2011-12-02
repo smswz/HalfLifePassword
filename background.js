@@ -3,6 +3,9 @@ var contentPort, popupPort,
 	passFields, formFields,
 	passwordMenuId, passId;
 
+var passfields = [];
+var formfields = []
+var i = 0;
 function contextFunction(info, tab) {
 	console.log(passId);
 	mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
@@ -43,6 +46,7 @@ function handlePopupMessages(msg) {
 	}
 	console.log(msg.type);
 }
+
 
 // Scripting
 chrome.extension.onConnect.addListener(function(port) {
