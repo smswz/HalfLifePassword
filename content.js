@@ -32,8 +32,6 @@ $("input").each(function(i,e){
 		while(parent.tagName.toLowerCase() !== "form"){ parent = parent.parentNode };
 		passfields.push(e.id);
 		formfields.push(parent.id);
-		console.log(e);
-		console.log(parent);
 		commPort.postMessage({"type": "show", "fields": passfields, "forms": formfields});
 	}
 });

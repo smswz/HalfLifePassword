@@ -38,11 +38,13 @@ function handleContentMessages(msg) {
 }
 
 function handlePopupMessages(msg) {
-	static var passIndex = 0;
+	if(typeof handlePopupMessages.passIndex == 'undefined'){ 
+		handlePopupMessages.passIndex = 0;
+	}
 	if(msg.type === "wantNext") {
-		contentPort.postMessage({"type": "highlight", "id": passFields[++passIndex].id});
+		contentPort.postMessage({"type": "highlight", "id": passFields[++handlePopupMessages.passIndex].id});
 	} else if(msg.type === "wantPrev") {
-		contentPort.postMessage({"type": "highlight", "id": passFields[--passIndex].id});
+		contentPort.postMessage({"type": "highlight", "id": passFields[--handlePopupMessages.passIndex].id});
 	}
 	console.log(msg.type);
 }
