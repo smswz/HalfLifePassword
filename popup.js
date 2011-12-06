@@ -47,11 +47,12 @@ $(function() {
 	$("#save").on("click", function(e){
 		e.preventDefault();
 		input = $("#jsform").val().toString();
+		user = $("#user").val().toString();
 		password = $("#pass").val().toString();
-		if((input !== "") && (password !== "")){
-			commPort.postMessage({"type": "result", "format": input, "password": pass});
+		if((input !== "") && (user !== "") && (password !== "")){
+			commPort.postMessage({"type": "result", "format": input, "user": user, "password": pass});
 		} else {
-			$("#example_out").html("Make sure both fields are filled in!");
+			$("#example_out").html("Make sure all fields are filled in!");
 		}
 	});
 

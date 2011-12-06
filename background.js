@@ -6,6 +6,7 @@ var contentPort, popupPort,
 var passfields = [];
 var formfields = []
 var i = 0;
+
 function contextFunction(info, tab) {
 	console.log(passId);
 	mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
