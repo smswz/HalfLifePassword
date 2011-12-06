@@ -1,7 +1,7 @@
 // Declarations
 var contentPort, popupPort,
 	passFields, formFields,
-	passwordMenuId, passId;
+	passId;
 
 var passfields = [];
 var formfields = []
@@ -13,20 +13,6 @@ function contextFunction(info, tab) {
 }
 
 function handleContentMessages(msg) {
-	if(msg.type === "pass") {
-		if((msg.passId != null) && (!passwordMenuId)) {
-			passwordMenuId = chrome.contextMenus.create(
-				{"title": "Setup a half-life password",
-				 "contexts": ["all"],
-				 "onclick": contextFunction});
-			passId = msg.passId;
-			//console.log(msg.passId + " " + msg.formId);
-		}
-		else if((msg.passId == null) && (passwordMenuId)) {
-			chrome.contextMenus.remove(passwordMenuId);
-			passwordMenuId = null;
-		}
-	} // context menu messages
 	if(msg.type === "show"){
 		chrome.tabs.getSelected(null, function(t){
 			chrome.pageAction.show(t.id);
@@ -42,7 +28,7 @@ function handlePopupMessages(msg) {
 		handlePopupMessages.passIndex = 0;
 	}
 
-	contentPort.postMessage({"type": "unlight", "id": passFields[handlePopupMessages.passIndex]});
+	contentPort.postMessage({"type": "unlight", "id": passId});
 	if(msg.type === "wantNext") {
 		handlePopupMessages.passIndex = (handlePopupMessages.passIndex + 1) % passFields.length; 
 	} else if(msg.type === "wantPrev") {
@@ -50,6 +36,7 @@ function handlePopupMessages(msg) {
 		if(handlePopupMessages.passIndex < 0){ handlePopupMessages.passIndex = passFields.length - 1}
 	}
 	contentPort.postMessage({"type": "highlight", "id": passFields[handlePopupMessages.passIndex]});
+	passId = passFields[handlePopupMessages.passIndex];
 
 	console.log(msg.type);
 	console.log(handlePopupMessages.passIndex);

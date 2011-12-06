@@ -1,22 +1,13 @@
 // Declarations
 var commPort;
+var passfields = [];
+var formfields = [];
 
 function handleMessages(msg){
 	if(msg.type === "highlight"){
-		$("#" + msg.id).css("background-color", "green");
-	} else if(msg.type === "unlight"){
+		$("#" + msg.id).css("background-color", "#A7F0A3");
+	} else if((msg.type === "unlight") && (msg.id != null)){
 		$("#" + msg.id).css("background-color", "white");
-	}
-}
-
-function showContext(e){
-	var node = e.target;
-	if((e.which == 3) && (node.tagName.toLowerCase() === "input") && (node.type === "password")){
-		//console.log({"passId": node.id, "formId": node.form.id});
-		commPort.postMessage({"type": "pass", "passId": node.id});
-		//console.log(node.value);
-	} else {
-		commPort.postMessage({"type": "pass", "passId": null});
 	}
 }
 
@@ -24,10 +15,6 @@ function showContext(e){
 commPort = chrome.extension.connect({"name": "content"});
 commPort.onMessage.addListener(handleMessages);
 
-$("body").on("mousedown", showContext);
-
-var passfields = [];
-var formfields = [];
 $("input").each(function(i,e){
 	if(this.type === "password"){
 		var parent = e;
