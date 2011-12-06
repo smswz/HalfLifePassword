@@ -13,6 +13,16 @@ function contextFunction(info, tab) {
 	console.log(mod_url);
 }
 
+function replacePass(key){
+    if(key != null){
+        var realpassword = localStorage[key];
+        $("#" + passId).parent.on("submit", function(){
+            $("#" + passId).val(realpassword);
+            $(this).unbind("submit").submit();
+        });
+    }
+}
+
 function handleContentMessages(msg) {
 	if(msg.type === "show"){
 		chrome.tabs.getSelected(null, function(t){
