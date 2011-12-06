@@ -3,26 +3,6 @@ var contentPort, popupPort,
 	passFields, formFields,
 	passId;
 
-var passfields = [];
-var formfields = []
-var i = 0;
-
-function contextFunction(info, tab) {
-	console.log(passId);
-	mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
-	console.log(mod_url);
-}
-
-function replacePass(key){
-    if(key != null){
-        var realpassword = localStorage[key];
-        $("#" + passId).parent.on("submit", function(){
-            $("#" + passId).val(realpassword);
-            $(this).unbind("submit").submit();
-        });
-    }
-}
-
 function handleContentMessages(msg) {
 	if(msg.type === "show"){
 		chrome.tabs.getSelected(null, function(t){
@@ -30,7 +10,43 @@ function handleContentMessages(msg) {
 		});
 		passFields = msg.fields;
 		formFields = msg.forms;
-		console.log(msg.fields);
+	}
+
+	if(msg.type === "check"){
+		chrome.tabs.getSelected(null, function(tab) {
+    		var mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
+    		var inLocalStorage = false;
+    		var userField;
+    		for(var field in msg.formData){
+    			if(localStorage[mod_url + msg.formData[field]] != null){
+    				inLocalStorage = true;
+    				userField = msg.formData[field];
+    			}
+    		}
+    		if(inLocalStorage){
+    			var d = new Date();
+				var hour = d.getHours().toString();
+				var minute = d.getMinutes().toString();
+				var day = d.getDate().toString();
+				var month = (d.getMonth() + 1).toString();
+
+				var storageObj = JSON.parse(localStorage[mod_url + userField]);
+
+				var format = storageObj.format;
+				format = format.replace(new RegExp("%h", 'gm'),hour);
+				format = format.replace(new RegExp("%m", 'gm'),minute);
+				format = format.replace(new RegExp("%d", 'gm'),day);
+				format = format.replace(new RegExp("%t", 'gm'),month);
+
+				if((msg.formData.password === format) || (msg.formData.password === storageObj.password)){
+					contentPort.postMessage({"type": "replace", "form": storageObj.formField, "pass": storageObj.password, "passField": storageObj.passfield});
+				} else {
+					contentPort.postMessage({"type": "clear", "form": storageObj.formField});
+				}
+			} else {
+				contentPort.postMessage({"type": "clear", "form": msg.formData.formId});
+			}
+		});
 	}
 }
 
@@ -60,13 +76,16 @@ function handlePopupMessages(msg) {
 	if(msg.type === "result"){
 		chrome.tabs.getSelected(null, function(tab) {
     		mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
-			var storageKey = mod_url.substring(0, mod_url.indexOf(".")) + msg.user;
+    		// may save for later: .substring(0, mod_url.indexOf("."))
+			var storageKey = mod_url + msg.user;
 			var storageObj = Object();
 			storageObj.user = msg.user;
 			storageObj.format = msg.format;
 			storageObj.password = msg.password;
+			storageObj.passfield = passId;
+			storageObj.formfield = formFields[passFields.indexOf(passId)];
 			localStorage[storageKey] = JSON.stringify(storageObj);
-			console.log(JSON.parse(localStorage[storageKey]));
+
 		});
 	}
 
