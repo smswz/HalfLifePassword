@@ -48,7 +48,7 @@ function handlePopupMessages(msg) {
 	}
 
 	if(msg.type === "result"){
-		// Add results to localStorage
+		console.log(msg);
 	}
 
 	if((msg.type === "close") || (msg.type === "result")){
@@ -57,8 +57,6 @@ function handlePopupMessages(msg) {
 		});
 	}
 
-	console.log(msg.type);
-	console.log(handlePopupMessages.passIndex);
 }
 
 

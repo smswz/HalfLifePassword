@@ -50,7 +50,7 @@ $(function() {
 		user = $("#user").val().toString();
 		password = $("#pass").val().toString();
 		if((input !== "") && (user !== "") && (password !== "")){
-			commPort.postMessage({"type": "result", "format": input, "user": user, "password": pass});
+			commPort.postMessage({"type": "result", "format": input, "user": user, "password": password});
 		} else {
 			$("#example_out").html("Make sure all fields are filled in!");
 		}
