@@ -3,7 +3,9 @@ var commPort;
 
 function handleMessages(msg){
 	if(msg.type === "highlight"){
-		$("#" + msg.id).background = ""
+		$("#" + msg.id).css("background-color", "green");
+	} else if(msg.type === "unlight"){
+		$("#" + msg.id).css("background-color", "white");
 	}
 }
 

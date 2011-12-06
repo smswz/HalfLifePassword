@@ -41,12 +41,18 @@ function handlePopupMessages(msg) {
 	if(typeof handlePopupMessages.passIndex == 'undefined'){ 
 		handlePopupMessages.passIndex = 0;
 	}
+
+	contentPort.postMessage({"type": "unlight", "id": passFields[handlePopupMessages.passIndex]});
 	if(msg.type === "wantNext") {
-		contentPort.postMessage({"type": "highlight", "id": passFields[++handlePopupMessages.passIndex].id});
+		handlePopupMessages.passIndex = (handlePopupMessages.passIndex + 1) % passFields.length; 
 	} else if(msg.type === "wantPrev") {
-		contentPort.postMessage({"type": "highlight", "id": passFields[--handlePopupMessages.passIndex].id});
+		handlePopupMessages.passIndex--;
+		if(handlePopupMessages.passIndex < 0){ handlePopupMessages.passIndex = passFields.length - 1}
 	}
+	contentPort.postMessage({"type": "highlight", "id": passFields[handlePopupMessages.passIndex]});
+
 	console.log(msg.type);
+	console.log(handlePopupMessages.passIndex);
 }
 
 
