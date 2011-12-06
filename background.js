@@ -48,7 +48,11 @@ function handlePopupMessages(msg) {
 	}
 
 	if(msg.type === "result"){
-		console.log(msg);
+		chrome.tabs.getSelected(null, function(tab) {
+    		mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
+			var storageKey = mod_url.substring(0, mod_url.indexOf(".")) + msg.user;
+			console.log(storageKey);
+		});
 	}
 
 	if((msg.type === "close") || (msg.type === "result")){
