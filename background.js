@@ -51,7 +51,12 @@ function handlePopupMessages(msg) {
 		chrome.tabs.getSelected(null, function(tab) {
     		mod_url = tab.url.match(/(\w*\.\w{2,3})\//)[1];
 			var storageKey = mod_url.substring(0, mod_url.indexOf(".")) + msg.user;
-			console.log(storageKey);
+			var storageObj = Object();
+			storageObj.user = msg.user;
+			storageObj.format = msg.format;
+			storageObj.password = msg.password;
+			localStorage[storageKey] = JSON.stringify(storageObj);
+			console.log(JSON.parse(localStorage[storageKey]));
 		});
 	}
 
