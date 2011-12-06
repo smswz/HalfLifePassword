@@ -27,6 +27,33 @@ function generateHLP(e){
 
 }
 
+function submitValues(e){
+	e.preventDefault();
+	input = $("#jsform").val().toString();
+	user = $("#user").val().toString();
+	password = $("#pass").val().toString();
+	if((input !== "") && (user !== "") && (password !== "")){
+		commPort.postMessage({"type": "result", "format": input, "user": user, "password": password});
+	} else {
+		$("#example_out").html("Make sure all fields are filled in!");
+	}
+}
+
+function preventEnter(e){
+	code = (e.keyCode ? e.keyCode : e.which);
+	if(code == 13){ // prevent enter functionality
+		e.preventDefault();
+		input = $("#jsform").val().toString();
+		user = $("#user").val().toString();
+		password = $("#pass").val().toString();
+		if((input !== "") && (user !== "") && (password !== "")){
+			commPort.postMessage({"type": "result", "format": input, "user": user, "password": password});
+		} else {
+			$("#example_out").html("Make sure all fields are filled in!");
+		}
+	}
+}
+
 $(function() {
 	// Highlight first field
 	commPort.postMessage({"type": "init"});
@@ -41,20 +68,16 @@ $(function() {
 		commPort.postMessage({"type": "wantNext"});
 	});
 
-	$("#test").on("click", generateHLP);
 	$("#jsform").on("blur", generateHLP);
+	$("#jsform").on("keypress", preventEnter);
 
-	$("#save").on("click", function(e){
-		e.preventDefault();
-		input = $("#jsform").val().toString();
-		user = $("#user").val().toString();
-		password = $("#pass").val().toString();
-		if((input !== "") && (user !== "") && (password !== "")){
-			commPort.postMessage({"type": "result", "format": input, "user": user, "password": password});
-		} else {
-			$("#example_out").html("Make sure all fields are filled in!");
-		}
-	});
+	$("#user").on("keypress", preventEnter);
+
+	$("#pass").on("keypress", preventEnter);
+
+	$("#save").on("click", submitValues);
+
+	$("#test").on("click", generateHLP);
 
 	$("#cancel").on("click", function(e){
 		e.preventDefault();

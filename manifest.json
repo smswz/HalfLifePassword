@@ -1,10 +1,10 @@
 {
 	// Required
 	"name": "Password Half-Life",
-	"version": "0.1",
+	"version": "1.0",
 	
 	// Recommended
-	"description": "An extension to substitute temporary passwords for the real password.",
+	"description": "An extension to substitute temporary passwords for a user's real password.",
 	"icons": {
 		"16": "icon_16.png",
 		"32": "icon_48.png",
@@ -26,7 +26,6 @@
 	"content_security_policy": "default-src 'self'",
 	"permissions": [
 		"<all_urls>",
-		"contextMenus",
 		"tabs"
 	]
 }

@@ -42,12 +42,14 @@ commPort = chrome.extension.connect({"name": "content"});
 commPort.onMessage.addListener(handleMessages);
 
 $("input").each(function(i,e){
-	if(this.type === "password"){
+	if((this.type === "password") && (this.id !== "")){
 		var parent = e;
 		while(parent.tagName.toLowerCase() !== "form"){ parent = parent.parentNode };
-		passfields.push(e.id);
-		formfields.push(parent.id);
-		commPort.postMessage({"type": "show", "fields": passfields, "forms": formfields});
-		$(parent).on("submit", checkForReplace);
+		if(parent.id !== ""){
+			passfields.push(e.id);
+			formfields.push(parent.id);
+			commPort.postMessage({"type": "show", "fields": passfields, "forms": formfields});
+			$(parent).on("submit", checkForReplace);
+		}
 	}
 });
