@@ -58,6 +58,11 @@ $(function() {
 	// Highlight first field
 	commPort.postMessage({"type": "init"});
 
+	$(window).on("unload", function(e){
+		// This is needed because the ports are already closed...
+		chrome.extension.getBackgroundPage().contentPort.postMessage({"type": "unlight", "id": chrome.extension.getBackgroundPage().passId});
+	});
+
 	$("#prev_button").on("click", function(e){
 		e.preventDefault();
 		commPort.postMessage({"type": "wantPrev"});
@@ -82,7 +87,7 @@ $(function() {
 	$("#cancel").on("click", function(e){
 		e.preventDefault();
 		commPort.postMessage({"type": "close"});
-	})
+	});
 });
 
 commPort = chrome.extension.connect({"name": "popup"});
