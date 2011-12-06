@@ -28,15 +28,33 @@ function handlePopupMessages(msg) {
 		handlePopupMessages.passIndex = 0;
 	}
 
-	contentPort.postMessage({"type": "unlight", "id": passId});
-	if(msg.type === "wantNext") {
+	if(msg.type !== "init"){
+		contentPort.postMessage({"type": "unlight", "id": passId});
+	}
+
+	if(msg.type === "wantNext"){
 		handlePopupMessages.passIndex = (handlePopupMessages.passIndex + 1) % passFields.length; 
-	} else if(msg.type === "wantPrev") {
+	}
+
+	if(msg.type === "wantPrev"){
 		handlePopupMessages.passIndex--;
 		if(handlePopupMessages.passIndex < 0){ handlePopupMessages.passIndex = passFields.length - 1}
 	}
-	contentPort.postMessage({"type": "highlight", "id": passFields[handlePopupMessages.passIndex]});
-	passId = passFields[handlePopupMessages.passIndex];
+
+	if((msg.type === "init") || (msg.type === "wantNext") || (msg.type === "wantPrev")){
+		contentPort.postMessage({"type": "highlight", "id": passFields[handlePopupMessages.passIndex]});
+		passId = passFields[handlePopupMessages.passIndex];
+	}
+
+	if(msg.type === "result"){
+		// Add results to localStorage
+	}
+
+	if((msg.type === "close") || (msg.type === "result")){
+		chrome.tabs.getSelected(null, function(tab) {
+    		chrome.tabs.update(tab.id, { selected: true });
+		});
+	}
 
 	console.log(msg.type);
 	console.log(handlePopupMessages.passIndex);

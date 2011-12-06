@@ -28,6 +28,9 @@ function generateHLP(e){
 }
 
 $(function() {
+	// Highlight first field
+	commPort.postMessage({"type": "init"});
+
 	$("#prev_button").on("click", function(e){
 		e.preventDefault();
 		commPort.postMessage({"type": "wantPrev"});
